@@ -41,10 +41,6 @@ h1 {
 }
 
 .btn {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  top: 0;
   padding: 8px 14px;
   background-color: #007bff;
   color: #fff;
@@ -94,4 +90,7 @@ li span {
 
 .btn-del:hover {
   background-color: #bd2130;
+}
+
+.btnSort {
 }

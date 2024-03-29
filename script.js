@@ -3,6 +3,37 @@ const list = container.querySelector('.list');
 let input = container.querySelector('.input');
 const btn = container.querySelector('.btn');
 let todoList = []; // Массив для хранения элементов списка дел
+const btnSort = container.querySelector('.btnSort');
+let ascendingOrder = true; // Переменная для отслеживания текущего направления сортировки
+
+const sortToggle = () => {
+  todoList.sort((a, b) => {
+    const textA = a.querySelector('span').textContent.toLowerCase();
+    const textB = b.querySelector('span').textContent.toLowerCase();
+
+    // Пытаемся преобразовать текст в числа
+    const numberA = parseInt(textA);
+    const numberB = parseInt(textB);
+
+    // В зависимости от текущего направления сортировки
+    if (ascendingOrder) {
+      // Если в порядке возрастания
+      if (numberA && numberB) {
+        return numberA - numberB;
+      }
+      return textA.localeCompare(textB);
+    } else {
+      // Если в порядке убывания
+      if (numberA && numberB) {
+        return numberB - numberA;
+      }
+      return textB.localeCompare(textA);
+    }
+  });
+
+  // Переключаем направление сортировки для следующего раза
+  ascendingOrder = !ascendingOrder;
+};
 
 function addEmptyListItem() {
   // Создаем элемент "Задач нет"
@@ -28,31 +59,11 @@ btn.addEventListener('click', () => {
   btnDel.classList.add('btn-del');
 
   if (input.value !== '') {
-    if (todoList.length === 0) {
-    }
     todoList.push(li); // Добавляем элемент списка в массив
     list.append(li);
     li.append(span);
     li.append(btnDel);
     input.value = ''; // Очистка и обновление списка
-
-    // Сортировка списка дел
-    todoList.sort((a, b) => {
-      const textA = a.querySelector('span').textContent.toLowerCase();
-      const textB = b.querySelector('span').textContent.toLowerCase();
-
-      // Пытаемся преобразовать текст в числа
-      const numberA = parseFloat(textA);
-      const numberB = parseFloat(textB);
-
-      // Если оба значения успешно преобразованы в числа, сортируем их как числа
-      if (!isNaN(numberA) && !isNaN(numberB)) {
-        return numberA - numberB;
-      }
-
-      // Иначе сортируем как строки
-      return textA.localeCompare(textB);
-    });
 
     // Очистка и обновление списка
     list.innerHTML = '';
@@ -70,5 +81,15 @@ btn.addEventListener('click', () => {
       // Если список пуст, добавляем элемент "Задач нет"
       addEmptyListItem();
     }
+  });
+});
+
+btnSort.addEventListener('click', () => {
+  sortToggle();
+
+  // Очистка и обновление списка
+  list.innerHTML = '';
+  todoList.forEach(item => {
+    list.append(item);
   });
 });
